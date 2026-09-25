@@ -1,0 +1,38 @@
+---
+# -------------------------------------------------
+# OEM Blackout Simple - Entry Playbook
+# -------------------------------------------------
+# Purpose: Create a simple OEM blackout for specified hosts without idempotency checks.
+#          Use oem_blackout_create_host_main.yml for full idempotency, duration validation,
+#          and supplemental blackout support.
+#
+# Usage:
+#   # Single host
+#   ansible-playbook -i inv_test.ini oem_blackout_simple_main.yml -e group1=tdba1ebs11.toshibagcs.com
+#
+#   # Inventory group
+#   ansible-playbook -i inv_test.ini oem_blackout_simple_main.yml -e group1=group1
+#
+#   # Override duration
+#   ansible-playbook -i inv_test.ini oem_blackout_simple_main.yml -e group1=group1 -e blackout_duration_minutes=60
+# -------------------------------------------------
+
+# - hosts: localhost
+#   connection: local
+#   gather_facts: no
+
+#   tasks:
+#     - name: Run oem_blackout_create role once
+#       import_role:
+#         name: oem_blackout_create_host
+#       run_once: true
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Run oem_blackout_create_host
+      import_role:
+        name: centroid.linuxpatchingcommon.oem_blackout_create_host
+      run_once: true
+      delegate_to: localhost
