@@ -1,0 +1,4 @@
+collections:
+  - name: "https://github.com/centroidcloudteam/Linux-Patching-Automation.git"
+    version: "main"
+    type: git
