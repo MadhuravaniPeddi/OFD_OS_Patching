@@ -1,0 +1,75 @@
+---
+- name: Connection Status Report
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Check server connectivity (Ping)
+      ping:
+      ignore_unreachable: true
+      register: ping_status
+
+    - name: Send Email Summary Report
+      mail:
+        host: "{{ smtp_server }}"
+        port: "{{ smtp_port }}"
+        from: "{{ email_sender }}"
+        secure: never
+        to: "{{ email_recipients }}"
+        subject: "{{ client }} {{ env }} Server Connectivity Report"
+        subtype: html
+        body: |
+          <html>
+          <body style="font-family: Arial, sans-serif;">
+
+          <h2>{{ client }} {{ env }} Connectivity Status Report</h2>
+
+          <p>
+          <b>Total Servers:</b> {{ ansible_play_hosts_all | length }}
+          </p>
+
+          <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse;">
+            <tr style="background-color:#4CAF50;color:white;">
+              <th>S.No</th>
+              <th>Server Name</th>
+              <th>Status</th>
+            </tr>
+
+            {% for host in ansible_play_hosts_all %}
+            {% set status = hostvars[host].ping_status %}
+            <tr>
+              <td align="center">{{ loop.index }}</td>
+              <td>{{ host }}</td>
+              <td>
+                {% if status.unreachable | default(false) %}
+                  <span style="color:red;"><b>❌ UNREACHABLE</b></span>
+                {% elif status.failed | default(false) %}
+                  <span style="color:red;"><b>❌ FAILED</b></span>
+                {% else %}
+                  <span style="color:green;"><b>✅ REACHABLE</b></span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+
+          </table>
+
+          <br>
+          <p>
+            <b>Thanks & Regards</b>
+            <br>
+            <b>Automation Team</b>
+          </p>
+
+          </body>
+          </html>
+      run_once: true
+      delegate_to: localhost
+      ignore_errors: true
+
+    - name: Fail the playbook if the server had connection issues
+      fail:
+        msg: "This server was unreachable or had an error during the ping check."
+      when: >
+        ping_status.unreachable | default(false) or
+        ping_status.failed | default(false)
