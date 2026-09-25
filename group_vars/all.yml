@@ -1,0 +1,23 @@
+reboot_after_update: true
+reboot_before_pretasks: true
+
+enable_email: true
+enable_bucket: false
+
+# ist_date: "{{ lookup('pipe', 'TZ=Asia/Kolkata date \"+%Y-%m-%d\"') | trim }}"
+currentDate: "{{ '%Y-%m-%d' | strftime }}"
+currentDateTime: "{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S') }}"
+logs_loc: "/var/lib/awx/projects/LP_Automation/logs/{{ env }}"
+
+client: "OFD"
+patching_client: "OFD"
+# smtp details for sending logs
+smtp_server: jopari-com.mail.protection.outlook.com
+smtp_port: "25"
+email_sender: awx@dr-olam-01.localdomain
+email_recipients:
+  - madhuravani.peddi@centroid.com
+  - Jopari.SA.Support@centroid.com
+
+
+oem_url: "https://10.196.103.205:7803"
