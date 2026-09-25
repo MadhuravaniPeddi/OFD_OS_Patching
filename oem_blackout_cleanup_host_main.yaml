@@ -1,0 +1,37 @@
+---
+# -------------------------------------------------
+# OEM Blackout Cleanup - Entry Playbook
+# -------------------------------------------------
+# Purpose: Find and delete OEM blackouts created by oem_blackout_simple for specified hosts
+# 
+# Usage:
+#   # Preview cleanup for DBA environment (default)
+#   ansible-playbook -i inv_cen.ini oem_blackout_cleanup_host_main.yml -e group1=cenoemtest02-hosta.ad.centroid.com
+#
+#   # Execute cleanup (actually delete blackouts)
+#   ansible-playbook -i inv_cen.ini oem_blackout_cleanup_host_main.yml -e group1=cenoemtest02-hosta.ad.centroid.com -e oem_cleanup_mode=execute
+#
+#   # Cleanup group1
+#   ansible-playbook -i inv_cen.ini oem_blackout_cleanup_host_main.yml -e group1=group1 -e oem_cleanup_mode=execute
+#
+# -------------------------------------------------
+
+# - hosts: localhost
+#   connection: local
+#   gather_facts: no
+
+#   tasks:
+#     - name: Run oem_blackout_cleanup_host role
+#       import_role:
+#         name: oem_blackout_cleanup_host
+#       run_once: true
+
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Run oem_blackout_cleanup_host
+      import_role:
+        name: centroid.linuxpatchingcommon.oem_blackout_cleanup_host
+      run_once: true
+      delegate_to: localhost
