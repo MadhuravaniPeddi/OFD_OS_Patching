@@ -1,0 +1,12 @@
+- name: Boot volume backup
+  hosts: all
+
+  vars:
+    target: "{{ group1 }}"
+        
+  tasks:
+    - name: bootvolume creation for all hosts
+      include_role:
+        name: centroid.linuxpatchingcommon.pre_tasks
+        tasks_from: bootvolume_backup_parallel.yml
+      run_once: true
