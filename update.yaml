@@ -1,0 +1,16 @@
+---
+- name: Update
+  hosts: all
+  tasks:
+    - name: Show the current host information
+      vars:
+        current_host_info:
+          inventory_hostname: "{{ inventory_hostname }}"
+          ansible_host: "{{ ansible_host }}"
+          current_instance_id: "{{ hostvars[ansible_host].id }}"
+      debug:
+        var: current_host_info
+    
+    - name: Run Update
+      include_role:
+        name: centroid.linuxpatchingcommon.update
