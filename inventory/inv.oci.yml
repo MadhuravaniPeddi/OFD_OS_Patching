@@ -1,0 +1,23 @@
+---
+plugin: oracle.oci.oci
+
+regions:
+  - us-phoenix-1
+  - us-ashburn-1
+
+#hostname_format: fqdn
+
+compartments:
+  - compartment_ocid: "ocid1.compartment.oc1..aaaaaaaaez4rcnzsiufk3caezv4bokatkueiu7fdrwqbmb5j4upgzqte66sa"   #Phoenix DR
+    fetch_compute_hosts: true
+    fetch-hosts-from-subcompartments: false
+
+  - compartment_ocid: "ocid1.compartment.oc1..aaaaaaaaohmqi43pvkhbm7lndxqvuosxa2ucpc4pmlgopnzy5d4f3m24x7xa"   #Phoenix JumpBox
+    fetch_compute_hosts: true
+    fetch-hosts-from-subcompartments: false
+
+
+hostname_format_preferences:
+  - "display_name"
+  - "private_ip"
+  - "id"
