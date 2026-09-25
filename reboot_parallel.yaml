@@ -1,0 +1,13 @@
+---
+- name: Reboot Parallel
+  hosts: all
+
+  vars:
+    target: "{{ group1 }}"
+        
+  tasks:
+    - name: Reboot all hosts
+      include_role:
+        name: centroid.linuxpatchingcommon.reboot
+        tasks_from: oci_reboot_parallel.yml
+      run_once: true
